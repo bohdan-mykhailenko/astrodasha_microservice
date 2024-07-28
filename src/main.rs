@@ -1,16 +1,15 @@
-use axum::{routing::get,     http::StatusCode,
-           Json, Router,};
+use crate::routes::create_routes::create_routers;
 
 mod api;
+mod services;
+mod errors;
+mod routes;
 
 #[tokio::main]
 async fn main() {
-    let app = Router::new().route("/data", get(root));
-
+    let routers = create_routers();
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+
+    axum::serve(listener, routers).await.unwrap();
 }
 
-async fn root() -> &'static str {
-    "Hello, World!"
-}
